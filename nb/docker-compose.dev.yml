@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+
+  db_user:
+    image: postgres:15
+    volumes:
+      - ./env:/env
+      - db_user_data:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    env_file:
+      - ./env/db/user/.env.dev
+
+  cache_user:
+    image: redis:7.0.8
+    ports:
+      - 6380:6379
+    volumes:
+      - cache_user_data:/data
+    env_file:
+      - ./env/cache/user/.env.dev
+
+  es_movie:
+    image: elasticsearch:7.7.0
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - es_movie_data:/usr/share/elasticsearch-one/data
+    ports:
+      - 9200:9200
+    env_file:
+      - ./env/es/movie/.env.dev
+
+volumes:
+  db_user_data:
+  cache_user_data:
+  es_movie_data:

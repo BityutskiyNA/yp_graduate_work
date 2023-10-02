@@ -1,0 +1,277 @@
+version: "3.8"
+
+services:
+
+  db_movie:
+    image: postgres:15
+    volumes:
+      - ./env:/env
+      - ./databases/postgres/movie/init_dump.sql:/docker-entrypoint-initdb.d/init_dump.sql
+      - db_movie_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    env_file:
+      - ./env/db/movie/.env.dev
+
+  db_user:
+    image: postgres:15
+    volumes:
+      - ./env:/env
+      - db_user_data:/var/lib/postgresql/data
+    ports:
+      - "5433:5433"
+    env_file:
+      - ./env/db/user/.env.dev
+
+  db_loyalty:
+    image: postgres:15
+    volumes:
+      - ./env:/env
+      - db_loyalty_data:/var/lib/postgresql/data
+    ports:
+      - "5434:5434"
+    env_file:
+      - ./env/db/loyalty/.env.dev
+
+  cache_movie:
+    image: redis:7.0.8
+    ports:
+      - "6380:6379"
+    volumes:
+      - cache_movie_data:/data
+    env_file:
+      - ./env/cache/movie/.env.dev
+
+  cache_user:
+    image: redis:7.0.8
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache_user_data:/data
+    env_file:
+      - ./env/cache/user/.env.dev
+
+  es_movie:
+    image: elasticsearch:7.7.0
+    environment:
+      - discovery.type=single-node
+    volumes:
+      - es_movie_data:/usr/share/elasticsearch-one/data
+    ports:
+      - "9200:9200"
+    env_file:
+      - ./env/es/movie/.env.dev
+
+  django_movies_admin_panel:
+    image: django_movies_admin_panel
+    build:
+      context: ./django/movies_admin_panel/app
+      dockerfile: Dockerfile.dev
+    depends_on:
+      db_movie:
+        condition: service_started
+    volumes:
+      - ./env:/env
+      - ./.env:/.env
+      - ./django/movies_admin_panel/app:/django/movies_admin_panel/app
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./env/db/movie/.env.dev
+      - ./env/django/movie/.env.dev
+      - ./env/docker/movie/.env.dev
+
+  etl_pg_to_es:
+    image: etl_pg_to_es
+    build:
+      context: ./etl/pg_to_es
+      dockerfile: Dockerfile.dev
+    depends_on:
+      db_movie:
+        condition: service_started
+      cache_movie:
+        condition: service_started
+      es_movie:
+        condition: service_started
+      django_movies_admin_panel:
+        condition: service_started
+    volumes:
+      - ./env:/env
+      - ./.env:/.env
+      - ./etl/pg_to_es:/etl/pg_to_es
+    env_file:
+      - ./env/db/movie/.env.dev
+      - ./env/cache/movie/.env.dev
+      - ./env/es/movie/.env.dev
+      - ./env/docker/movie/.env.dev
+
+  flask_user_app:
+    container_name: flask_user_app
+    build:
+      context: ./flask/user
+      dockerfile: Dockerfile.dev
+    image: flask_user_app-image
+    volumes:
+      - ./env:/env
+      - ./flask/user:/flask/user
+      - ./.env:/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      db_user:
+        condition: service_started
+      cache_user:
+        condition: service_started
+    env_file:
+      - ./env/cache/user/.env.dev
+      - ./env/db/user/.env.dev
+      - ./env/docker/user/.env.dev
+
+  fastapi_app:
+    container_name: fastapi_app
+    restart: unless-stopped
+    image: fastapi_app_image
+    build:
+      context: ./fastapi
+    ports:
+      - "8001:8001"
+    env_file:
+      - .env
+    depends_on:
+      - es_movie
+
+#  ugc_fastapi_api:
+#    container_name: ugc_fastapi_api
+#    restart: unless-stopped
+#    image: ugc_fastapi_app_image
+#    build:
+#      context: ./ugc/ugc_fastapi
+#      dockerfile: Dockerfile
+#    env_file:
+#      - .env
+#    depends_on:
+#      - es_movie
+#    ports:
+#      - "8002:8002"
+#
+#  ugc_fastapi_content_date:
+#    container_name: ugc_fastapi_content_date
+#    restart: unless-stopped
+#    image: ugc_fastapi_content_date_imagemain.py
+#    volumes:
+#      - ./env:/env
+#      - ./.env:/.env
+#    build:
+#      context: ./ugc/ugc_fastapi_content_date
+#      dockerfile: Dockerfile
+#    env_file:
+#      - .env
+#    depends_on:
+#      - es_movie
+#    ports:
+#      - "8003:8003"
+#
+#  ugc_etl:
+#    container_name: ugc_etl
+#    restart: always
+#    image: ugc_etl_image
+#    build:
+#      context: ./ugc_etl
+#    env_file:
+#      - .env
+
+#  tests:
+#    image: fastapi_app_image
+#    container_name: tests_fastapi
+#    env_file:
+#      - .env
+#    entrypoint:
+#      /bin/sh -c "pip install -r /opt/fastapi_app/tests/functional/requirements.txt
+#      && python3 /opt/fastapi_app/tests/functional/utils/wait_for_es.py
+#      && python3 /opt/fastapi_app/tests/functional/utils/wait_for_redis.py
+#      && pytest /opt/fastapi_app/tests/functional/src/"
+
+  notifications_fastapi_api:
+    container_name: notifications_fastapi_api
+    restart: unless-stopped
+    image: notifications_fastapi_app_image
+    build:
+      context: ./notifications/notifications_fastapi
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    depends_on:
+      - es_movie
+      - rabbitmq
+    ports:
+      - "8004:8004"
+
+  rabbitmq:
+    container_name: rabbitmqdev
+    image: rabbitmq:3.10.7-management
+    hostname: rabbitmq
+    restart: unless-stopped
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBIT_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBIT_PASSWORD}
+      - RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS=-rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - ./rabbitmq:/var/lib/rabbitmq
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:15672" ]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  loyalty_api_app:
+    container_name: loyalty_api_app
+    restart: unless-stopped
+    image: loyalty_api_app_image
+    build:
+      context: ./loyalty/loyalty_api
+    ports:
+      - "8006:8006"
+    env_file:
+      - .env
+
+  redis_loyalty:
+    image: redis:7.0.8
+    ports:
+      - "6383:6379"
+    volumes:
+      - redis_loyalty_data:/data
+    env_file:
+      - ./env/cache/user/.env.dev
+
+
+  loyalty_admin_panel:
+    image: loyalty_admin_panel
+    build:
+      context: ./loyalty/loyalty_panel
+      dockerfile: Dockerfile.dev
+    depends_on:
+      db_movie:
+        condition: service_started
+    volumes:
+      - ./env:/env
+      - ./.env:/.env
+      - ./loyalty/loyalty_panel:/loyalty/loyalty_panel
+    ports:
+      - "8007:8007"
+    env_file:
+      - ./env/db/loyalty/.env.dev
+      - ./env/django/loyalty/.env.dev
+      - ./env/docker/loyalty/.env.dev
+
+
+volumes:
+  db_user_data:
+  db_movie_data:
+  db_loyalty_data:
+  cache_user_data:
+  cache_movie_data:
+  es_movie_data:
+  redis_loyalty_data:

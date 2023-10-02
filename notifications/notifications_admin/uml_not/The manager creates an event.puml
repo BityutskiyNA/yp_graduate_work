@@ -1,0 +1,27 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant manager
+participant admin_panel
+participant api
+participant db
+participant vorker
+
+'queue cache_user
+'queue cache_movie
+
+== Отправка рассылки менеджером ==
+manager->admin_panel:  Создает событие рассылки
+admin_panel->api: Отправляет запрос о рассылке
+api->db: Создает запись о сообщениях
+db->api: Информация о сообщениях записана
+api->vorker: Сообщения отправляются в воркер
+vorker->users: Запрашиваем данные пользователя
+users->vorker: получаем данные о почте часовом поясе фио
+vorker->vorker: в данном случае не проверяет актуальность события
+vorker->vorker: нужно ли проверять часовой пояс ?
+vorker->email: отправляет письма
+
+
+
+@enduml

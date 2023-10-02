@@ -1,0 +1,33 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant external_service
+participant api
+participant users
+
+participant db
+participant vorker
+
+'queue cache_user
+'queue cache_movie
+
+== Отправка рассылки по событию ==
+external_service->api:  Создает событие рассылки
+api->db: Создает запись о сообщениях
+db->api: Информация о сообщениях записана
+api->vorker: Сообщения отправляются в воркер
+vorker->users: Запрашиваем данные пользователя
+users->vorker: получаем данные о почте часовом поясе фио
+vorker->vorker: проверяет актуальность события
+
+alt Событие актуально
+    vorker->vorker: проверяет Время отправки
+else Событие не актуально
+    vorker->db: записывает что сообщения не отправлены по причине не актуальности события
+end
+alt Время отправки корректно
+     vorker->email: отправляет письма
+else Время отправки не корректно
+    vorker->vorker: обратно в очередь
+end
+@enduml

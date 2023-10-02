@@ -1,0 +1,14 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant admin
+participant admin_panel
+participant django_db
+
+
+== Создание скидки ==
+admin->admin_panel: Создает скидку на конкретный фильм или группу фильмов
+admin_panel->django_db: Записывает скидку в базу данных.
+
+
+@enduml

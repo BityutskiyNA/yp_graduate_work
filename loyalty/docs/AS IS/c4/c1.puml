@@ -1,0 +1,25 @@
+@startuml ecom-c1-customer
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "user")
+Person(admin, "admin")
+
+System(django_movies_admin_panel, "AdminAPI ", "Editing movie data") [[./ecom-c2-customer.puml]]
+System(flask_user_app, "FlaskAPI", "Authorization system") [[./ecom-c2-customer.puml]]
+System(fastapi_app, "MovieAPI", "Movie query system") [[./ecom-c2-customer.puml]]
+System(BigData, "UGC", "Vault for analytics") [[./ecom-c2-customer.puml]]
+System(Notification, "Notification ", "Sending messages") [[./ecom-c2-customer.puml]]
+
+Rel_D(user, flask_user_app, "Authorization CRUD")
+
+Rel_D(user, fastapi_app, "film query")
+Rel_D(user, BigData, "Handles an event")
+
+Rel_D(admin, django_movies_admin_panel, "film CRUD")
+Rel_D(django_movies_admin_panel, fastapi_app, "film CRUD")
+
+
+Rel_D(admin, Notification, "mailing list creation")
+@enduml

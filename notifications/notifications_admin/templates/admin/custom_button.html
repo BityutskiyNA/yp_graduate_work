@@ -1,0 +1,17 @@
+{% load static %}
+
+{% block extrahead %}
+    <script type="text/javascript">
+        // Ваш скрипт для обработки нажатия кнопки
+        function handleCustomButtonClick() {
+            // Ваш код обработки нажатия кнопки
+            alert("Вы нажали на свою кнопку!");
+        }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <div class="custom-button">
+        <button onclick="handleCustomButtonClick()">Моя кнопка</button>
+    </div>
+{% endblock %}

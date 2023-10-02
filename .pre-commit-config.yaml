@@ -1,0 +1,29 @@
+repos:
+-   repo: local
+    hooks:
+    -   id: flake8
+        name: flake8
+        description: flake8 enforcement
+        entry: flake8
+        exclude: ^(tests/|migrations/)
+        args: ["--config=setup.cfg"]
+        language: python
+        types: [python]
+
+    -   id: black
+        name: black
+        description: black enforcement
+        entry: black
+        language: python
+        types: [ python ]
+        exclude: ^(tests/|migrations/)
+
+    -   id: mypy
+        name: mypy
+        description: mypy enforcement
+        entry: mypy
+        exclude: ^(tests/|migrations/)
+        args: [./loyalty ,--config-file=./mypy.ini]
+        pass_filenames: false
+        language: python
+        types: [ python ]

@@ -1,0 +1,62 @@
+{#<!DOCTYPE html>#}
+{#<html>#}
+{#<head>#}
+{#    <title>Create Promo Code</title>#}
+{#</head>#}
+{#<body>#}
+{#    <h1>Create Promo Code</h1>#}
+{#    <form method="post">#}
+{#        {% csrf_token %}#}
+{#        {{ form.as_p }}#}
+{#        <button type="submit">Create</button>#}
+{#    </form>#}
+{#</body>#}
+{#</html>#}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Create Promo Code</title>
+    <style>
+        body {
+            background-color: #00aaff; /* Голубой цвет фона */
+            margin: 0; /* Убираем внешние отступы для body */
+            padding: 0; /* Убираем внутренние отступы для body */
+            font-family: Arial, sans-serif; /* Выбор шрифта */
+        }
+        h1 {
+            color: white; /* Белый цвет текста для заголовка */
+        }
+        form {
+            background-color: white; /* Белый цвет фона для формы */
+            padding: 20px; /* Внутренние отступы для формы */
+            border-radius: 5px; /* Скругление углов для формы */
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень для формы */
+        }
+        table {
+            margin: 20px 0; /* Внешние отступы для таблицы */
+        }
+        button {
+            background-color: #00aaff; /* Голубой цвет кнопки */
+            color: white; /* Белый цвет текста на кнопке */
+            border: none; /* Убираем границу у кнопки */
+            padding: 10px 20px; /* Внутренние отступы для кнопки */
+            border-radius: 5px; /* Скругление углов для кнопки */
+            cursor: pointer; /* Изменение курсора при наведении */
+        }
+        button:hover {
+            background-color: #0077cc; /* Изменение цвета кнопки при наведении */
+        }
+    </style>
+</head>
+<body>
+    <h1>Create Promo Code</h1>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            {{ form.as_table }}
+        </table>
+        <button type="submit">Create</button>
+    </form>
+</body>
+</html>

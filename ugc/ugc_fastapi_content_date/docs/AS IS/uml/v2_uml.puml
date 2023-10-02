@@ -1,0 +1,23 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant user
+participant fastapi_app
+participant es_movie
+'participant db_movie
+
+queue cache_movie
+'queue cache_movie
+
+== get film data ==
+user->fastapi_app:  запрашивает информацию о фильме передаем токен
+fastapi_app->fastapi_app: Проверяем токен
+fastapi_app->es_movie:  запрашивает информацию о фильме
+es_movie->fastapi_app:  Отправляет информацию о кино
+fastapi_app-x cache_movie: Добавляем фильмы в кеш
+fastapi_app->user:  возвращаем информацию о кино
+
+
+
+
+@enduml

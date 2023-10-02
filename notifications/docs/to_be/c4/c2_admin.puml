@@ -1,0 +1,57 @@
+startuml ecom-c2-customer
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/postgresql.puml
+!include DEVICONS/redis.puml
+!include DEVICONS/komodo.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User")
+Person(admin, "Admin")
+
+Container(django_movies_admin_panel, "django_movies_admin_panel", "django_movies_admin_panel")
+
+
+
+ContainerDb(db_movie, "db_movie", "PostgreSQL", $sprite="postgresql")
+
+ContainerDb(cache_movie, "cache_movie", "Redis", $sprite="redis")
+ContainerDb(cache_user, "cache_user", "Redis", $sprite="redis")
+ContainerDb(es_movie, "es_movie", "Elasticsearch")
+
+System_Boundary(flask, "FlaskAPI") {
+    Container(flask_user_app, "flask_user_app", "flask_user_app")
+    ContainerDb(db_user, "db_user", "PostgreSQL", $sprite="postgresql")
+
+    Rel(user, flask_user_app, "Sign up")
+    Rel(flask_user_app, db_user, "Signing up a user")
+    Rel(cache_user, flask_user_app, "Adding to the cache")
+    Rel(flask_user_app, user, "token")
+}
+
+System_Boundary(fast, "FastAPI") {
+    Container(fastapi_app, "fastapi_app", "python FastAPI")
+
+}
+
+System_Boundary(django, "MovieAPI") {
+
+
+}
+Rel(user, fastapi_app, "Requesting a movie")
+Rel(fastapi_app, db_movie, "data  movie")
+Rel(fastapi_app, es_movie, "Quick movie search")
+Rel(db_movie, fastapi_app, "movie")
+Rel(fastapi_app, cache_movie, "Add movies to the cache")
+
+Rel(admin, django_movies_admin_panel, "Sign up")
+Rel(django_movies_admin_panel, db_movie, "Requesting a data movie")
+Rel(db_movie, django_movies_admin_panel, "Get data movie")
+Rel(django_movies_admin_panel, admin, "editing movies")
+
+
+'System_Ext(yandex, "OAuth2", "payment system")
+
+@enduml

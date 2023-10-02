@@ -1,0 +1,13 @@
+version: '3.0'
+
+services:
+  mongors_test:
+    container_name: mongo_test
+    image: mongo
+    ports:
+      - 27017:27017
+    expose:
+      - "27017"
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+      - /tmp/mongo_cluster/data1:/data/db

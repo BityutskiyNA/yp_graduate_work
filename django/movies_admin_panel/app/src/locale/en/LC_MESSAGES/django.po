@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2023-05-16 03:38+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: src/admin/filmwork.py:46 src/models/filmwork_genre.py:21
+#: src/models/genre.py:22
+msgid "Genre"
+msgstr ""
+
+#: src/apps.py:8
+msgid "online cinema"
+msgstr ""
+
+#: src/models/filmwork.py:16
+msgid "Movie"
+msgstr ""
+
+#: src/models/filmwork.py:17
+msgid "Serial"
+msgstr ""
+
+#: src/models/filmwork.py:18
+msgid "Cartoon"
+msgstr ""
+
+#: src/models/filmwork.py:19
+msgid "TV show"
+msgstr ""
+
+#: src/models/filmwork.py:21
+msgid "Title"
+msgstr ""
+
+#: src/models/filmwork.py:23 src/models/genre.py:14
+msgid "Description"
+msgstr ""
+
+#: src/models/filmwork.py:26
+msgid "Creation date"
+msgstr ""
+
+#: src/models/filmwork.py:29
+msgid "Path to file"
+msgstr ""
+
+#: src/models/filmwork.py:33
+msgid "IMDB Rating"
+msgstr ""
+
+#: src/models/filmwork.py:41
+msgid "Type"
+msgstr ""
+
+#: src/models/filmwork.py:44
+msgid "Access level"
+msgstr ""
+
+#: src/models/filmwork.py:50 src/models/genre.py:23
+msgid "Genres"
+msgstr ""
+
+#: src/models/filmwork.py:53 src/models/person.py:20
+msgid "Persons"
+msgstr ""
+
+#: src/models/filmwork.py:61 src/models/filmwork_genre.py:15
+#: src/models/filmwork_person.py:15
+msgid "Filmwork"
+msgstr ""
+
+#: src/models/filmwork.py:62
+msgid "Filmworks"
+msgstr ""
+
+#: src/models/filmwork_genre.py:24 src/models/filmwork_person.py:26
+#: src/models/mixins/datetime.py:9
+msgid "Created at"
+msgstr ""
+
+#: src/models/filmwork_genre.py:31
+msgid "FilmworkGenre"
+msgstr ""
+
+#: src/models/filmwork_genre.py:32
+msgid "FilmworkGenres"
+msgstr ""
+
+#: src/models/filmwork_person.py:21 src/models/person.py:19
+msgid "Person"
+msgstr ""
+
+#: src/models/filmwork_person.py:24
+msgid "Role"
+msgstr ""
+
+#: src/models/filmwork_person.py:36
+msgid "FilmworkPerson"
+msgstr ""
+
+#: src/models/filmwork_person.py:37
+msgid "FilmworkPersons"
+msgstr ""
+
+#: src/models/genre.py:12
+msgid "Name"
+msgstr ""
+
+#: src/models/mixins/datetime.py:10
+msgid "Updated at"
+msgstr ""
+
+#: src/models/person.py:12
+msgid "Full name"
+msgstr ""

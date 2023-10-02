@@ -1,0 +1,24 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant user
+participant flask_user_app
+participant db_user
+
+queue cache_user
+'queue cache_movie
+
+== Authorization ==
+user->flask_user_app:  authorization request
+flask_user_app->db_user: Запрашиваем информацию оп пользователе
+alt Пользователь есть в базе
+    db_user->flask_user_app: Restore the data on the user in the database
+else Пользователя нет в базе
+    db_user->flask_user_app: Нет пользователя в базе
+    flask_user_app->db_user: Создаем пользователя в db_user
+    db_user->flask_user_app: Restore the data on the user in the database
+end
+flask_user_app-x cache_user: add user to cach
+flask_user_app-> user:<:key:>  возвращаем token пользователю
+
+@enduml

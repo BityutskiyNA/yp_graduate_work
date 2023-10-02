@@ -1,0 +1,27 @@
+# base image
+FROM python:3.11.2
+
+ENV APP_HOME=/loyalty/loyalty_panel
+
+WORKDIR $APP_HOME
+
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
+ENV DJANGO_SETTINGS_MODULE 'loyalty_panel.settings'
+
+RUN apt-get update && \
+    apt-get install -y gettext && \
+    apt install -y ncat && \
+    python -m pip install --upgrade pip && \
+    pip install poetry
+
+COPY . $APP_HOME
+
+RUN poetry config virtualenvs.create false
+RUN poetry install
+
+RUN chmod +x ./docker-entrypoint.dev.sh
+
+EXPOSE 8000
+
+ENTRYPOINT ["./docker-entrypoint.dev.sh"]

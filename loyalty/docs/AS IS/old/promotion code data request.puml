@@ -1,0 +1,20 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant service
+participant admin_panel
+participant api
+participant django_db
+
+== Обработка промокода полученного от стороннего сервиса ==
+service->api: передает промо код, запрашивая по нему данные через get запрос.
+api->admin_panel: обрабатывает пром код.
+alt промо код корректный
+    admin_panel->django_db: Записывает данные в историю использования промокода.
+    django_db->admin_panel: запись завершена
+    admin_panel->api: возвращает размер скидки.
+else промо код корректный(просроченный или уже использовался если он разовый)
+    admin_panel->api: возвращает информацию что код уже использовался или просрочен.
+end
+
+@enduml

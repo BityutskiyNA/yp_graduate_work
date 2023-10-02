@@ -1,0 +1,16 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant admin
+participant admin_panel
+participant django_db
+participant promotion_code_server
+
+== Создание промо кода ==
+admin->admin_panel: Создает промо на конкретный фильм или группу фильмов
+admin_panel->promotion_code_server: запрашивает промо
+promotion_code_server->admin_panel: выдает промо код
+admin_panel->django_db: Записывает промо код в базу данных.
+
+
+@enduml

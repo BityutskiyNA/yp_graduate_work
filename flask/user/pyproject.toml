@@ -1,0 +1,79 @@
+[tool.poetry]
+name = "flask app"
+version = "0.1.0"
+description = "flask app sprint2"
+authors = ["Sergey", "Tatyana", "Nikolai"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4.0"
+python-dotenv="==1.0.0"
+blinker="==1.6.2"
+Flask = "==2.2.3"
+SQLAlchemy = "==2.0.8"
+psycopg2-binary = "==2.9.5"
+redis="==4.5.4"
+alembic="==1.10.3"
+PyJWT="==2.6.0"
+Werkzeug="==2.3.1"
+marshmallow-sqlalchemy="==0.29.0"
+pytest="==7.3.1"
+flasgger="==0.9.5"
+flask-swagger="==0.2.14"
+opentelemetry-api = "^1.17.0"
+opentelemetry-sdk = "^1.17.0"
+opentelemetry-instrumentation-flask = "^0.38b0"
+opentelemetry-exporter-jaeger = "^1.17.0"
+rauth="==0.7.3"
+sentry-sdk="==1.25.1"
+python-logstash="==0.4.8"
+
+[tool.poetry.dev-dependencies]
+isort = "==5.12.0"
+flake8 = "==6.0.0"
+mypy = "==1.0.0"
+pre-commit = "==3.0.4"
+Flake8-pyproject = "==1.2.2"
+pyproject-autoflake = "==1.0.0"
+
+[tool.autoflake]
+in-place=true
+expand-star-imports=true
+remove-duplicate-keys=true
+remove-all-unused-imports=true
+
+[tool.black]
+line-length = 120
+skip-string-normalization=false
+
+[tool.mypy]
+disallow-untyped-defs=true
+disallow-incomplete-defs=true
+disallow-untyped-calls=true      
+
+
+[tool.isort]
+multi_line_output=3
+include_trailing_comma=true
+force_grid_wrap=0
+use_parentheses=true
+line_length=120
+
+[tool.flake8]
+ignore = ['E203', 'E266', 'E501', 'W503', 'F821', 'E902']
+max-line-length = 120
+max-complexity = 18
+select = ['B','C','E','F','W','T4']
+exclude= [    
+    '.env.example',
+    '.env',
+    '.env.dev',
+    'migration',
+    'env',
+    'env.example',
+    '__init__.py'
+]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

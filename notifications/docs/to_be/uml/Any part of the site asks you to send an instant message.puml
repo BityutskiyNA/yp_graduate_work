@@ -1,0 +1,37 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant event
+participant worker
+participant admin_panel
+participant rabit
+participant flask_user
+participant workerDB
+participant fast_api
+
+== Event created mailing list ==
+event->fast_api: Отправляем данные о событии
+alt Сообщение срочное
+    fast_api->rabit: Добавляем сообщение в специальную очередь
+else Сообщение не срочное
+    fast_api->rabit: Добавляем сообщение в обычную очередь
+end
+rabit->worker: Забираем сообщение
+worker->admin_panel: Отправляем вид события
+admin_panel->worker: По виду события получает рассылку по умолчанию для этого события
+worker->flask_user: По виду рассылки получаем всех пользователей подписанных на этот вид рассылки
+flask_user->worker: Получаем данные по пользователям
+worker->worker: На каждого пользователя создается письмо
+worker->workerDB: Пишется что письмо создано
+workerDB->worker: Данные записаны
+worker->mailServer: Отправляем сообщение
+mailServer->worker: Информация о отправлении
+alt Сообщение отправлено
+    worker->workerDB: Пишется что письмо отправлено
+    workerDB->worker: Данные записаны
+else Сообщение не отправлено
+    worker->workerDB: Пишется что письмо отправлено с ошибкой
+    workerDB->worker: Данные записаны
+    worker->rabit: Отправляем письмо в отдельную очередь для повторной отправки
+end
+@enduml

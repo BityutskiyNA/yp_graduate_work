@@ -1,0 +1,83 @@
+@startuml ecom-c2-customer
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+
+!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
+!include DEVICONS/postgresql.puml
+!include DEVICONS/redis.puml
+!include DEVICONS/komodo.puml
+!include DEVICONS/mongodb.puml
+
+LAYOUT_WITH_LEGEND()
+
+Person(user, "User")
+
+System_Boundary(flask, "FlaskAPI") {
+    ContainerDb(db_user, "db_user", "PostgreSQL", $sprite="postgresql")
+    ContainerDb(cache_user, "cache_user", "Redis", $sprite="redis")
+    Container(flask_user_app, "flask_user_app", "flask_user_app")
+
+
+    Rel(user, flask_user_app, "Sign up")
+    Rel(flask_user_app, cache_user, "Adding to the cache")
+    Rel(flask_user_app, db_user, "CRUD user data")
+}
+
+System_Boundary(fast, "FastAPI") {
+
+    Container(fastapi_app, "fastapi_app", "python FastAPI")
+    ContainerDb(cache_movie, "cache_movie", "Redis", $sprite="redis")
+    ContainerDb(db_movie, "db_movie", "PostgreSQL", $sprite="postgresql")
+    Container(etl_pg_to_es, "etl_pg_to_es")
+    ContainerDb(es_movie, "es_movie", "Elasticsearch")
+
+    Rel(user, fastapi_app, "Requesting a movie")
+'    Rel(fastapi_app, db_movie, "data  movie")
+'    Rel(fastapi_app, es_movie, "Quick movie search")
+
+    Rel(fastapi_app, cache_movie, "Add movies to the cache")
+    Rel(es_movie, etl_pg_to_es, "Add movies to the cache")
+    Rel(etl_pg_to_es, db_movie, "Add movies to the cache")
+    Rel(fastapi_app, es_movie, "Add movies to the cache")
+}
+
+
+System_Boundary(Kafka_as, "UGC") {
+   Container(kafka_serv, "server kafka",)
+   ContainerDb(Kafka, "Kafka",)
+   ContainerDb(ClickHouse, "ClickHouse",)
+   Container(etl_kafka, "etl kafka",)
+
+   Rel(user, kafka_serv, "handles the event")
+   Rel(kafka_serv, Kafka, "handles the event")
+   Rel(Kafka, etl_kafka, "handles the event")
+   Rel(etl_kafka, ClickHouse, "add data")
+
+}
+
+System_Boundary(logs, "Logs") {
+    Container(elka, "log server",)
+    ContainerDb(MongoDb, "Logs DB",$sprite="mongodb")
+
+    Rel(elka, MongoDb, "handles the event")
+    Rel(kafka_serv, elka, "handles the event")
+    Rel(etl_pg_to_es, elka, "handles the event")
+    Rel(fastapi_app, elka, "handles the event")
+    Rel(flask_user_app, elka, "handles the event")
+    Rel(etl_kafka, elka, "handles the event")
+'    Rel(Likes_API, elka, "handles the event")
+
+
+}
+
+System_Boundary(Likes, "Likes and comments") {
+    Container(Likes_API, "Likes API",)
+    ContainerDb(MongoDbLike, "Likes DB",$sprite="mongodb")
+
+    Rel(user, Likes_API, "Sign up")
+    Rel(Likes_API, MongoDbLike, "Sign up")
+    Rel(MongoDbLike, etl_kafka, "Sign up")
+    Rel(Likes_API, elka, "handles the event")
+}
+
+
+@enduml

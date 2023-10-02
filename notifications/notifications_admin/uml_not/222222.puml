@@ -1,0 +1,8 @@
+@startuml
+start
+while (Condition) is (True)
+  :Loop Body;
+  -[-> Loop End (False)-]
+endwhile (False)
+stop
+@enduml

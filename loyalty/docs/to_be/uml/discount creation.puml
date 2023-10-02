@@ -1,0 +1,30 @@
+@startuml
+autonumber
+footer Page %page% of %lastpage%
+participant admin
+participant admin_panel
+participant django_db
+
+
+== Создание скидки ==
+admin->admin_panel: Подписку,указывает план подписки
+admin_panel->django_db: Записывает план подписки.
+django_db->admin_panel: Данные записаны.
+admin_panel->admin: Подписка создана
+admin->admin_panel: Указывает параметры промокодов (вид, количество)
+admin_panel->django_db: генерирует и записывает в базу данных промо коды. в таблицу Discount_History
+django_db->admin_panel: Промокоды добавлены в базу и в таблицу Discount_History со статусом новые
+admin_panel->admin: Информирует о созданных промокодах
+alt необходимо использовать код
+    admin->admin_panel: Открывает конкретный код
+    admin_panel->django_db: Блокирует этот код в базе что бы к нему не возможно было обратиться по API
+    django_db->admin_panel: Объект заблокирован
+    admin_panel->admin: Ожидаем действий пользователя
+    admin->admin_panel: вносит новые данные или закрывает код
+    admin_panel->django_db: пишем информацию о коде в базу и таблицу Discount_History
+    django_db->admin_panel: Данные записаны
+    admin_panel->admin: Ожидаем действий пользователя
+else нет необходимости использовать код
+    admin->admin_panel: Продолжает работу
+end
+@enduml

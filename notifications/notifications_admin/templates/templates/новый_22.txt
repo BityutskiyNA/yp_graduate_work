@@ -1,0 +1,65 @@
+      POSTGRES_USER: todolist_user
+      POSTGRES_PASSWORD: 159951
+      POSTGRES_DB: todolist
+	  oMn5jjNvuya73qfW
+	  DY9bp21%>{D?$G_Zv>(;
+	  
+	  Бухгалтер на участке Поставщики - описание прав у пользователя Гладилина Тамара;
+	  ERP: 
+	  Регистрация  и редактирование документов блоков 
+	  1)Закупки,
+	  2)Продажи, 
+	  3)Казначейство, 
+	  4)Склад. 
+	  MES: Редактирование документов 
+	  Отвес накладные Процедуры убоя и Поступление живка. 
+	  Отчеты по данным блокам
+	  
+	  Бухгалтер на участке Производство - описание прав у пользователя Борисова Натэлла
+	  ERP: Регистрация  и редактирование документов блоков 
+	  1)Склад, 
+	  2)Производство, 
+	  3)Финансовый результат и контролинг. 
+	  Отчеты по данным блокам	
+	  MES только просмотр. 
+	  Запрет изменения справочников
+	  
+	  https://oauth.vk.com/authorize?client_id=51565260&scope=email&redirect_uri=http://127.0.0.1:9999/callback.
+	  ID приложения	51565260
+	  Защищённый ключ iDUH1CNPEBU9FgIfu1hd
+	  http://127.0.0.1:9999/callback?code=21f495d8360874c5cc
+	  
+	  
+	  https://oauth.vk.com/access_token?client_id=51565260&client_secret=iDUH1CNPEBU9FgIfu1hd&code=21f495d8360874c5cc&redirect_uri=http://127.0.0.1:9999/callback
+	  
+	  access_token	"vk1.a.ce9TmziSqpInewkAdaM4d4XE9t4TDa8eTt4pAt-C8qZCzSc7r6THfKLbsBESelygZgYv3uP9z-U8_-wax_PVbn2jxxBpRdiFRxdF8RH-tuQkRuHyAvK2maRdeLTpSJj6Cw3DsPwWNUZcnoMGwIHtvtSZpTxhvalK4DftzIRFreVSLX-GoOfZNZj4cuqAFTYBwOIDs8vHMn8uracLLzniGQ"
+expires_in	86312
+user_id	5586084
+email	"BityutskiyNA@gmail.com"
+
+
+
+POSTGRES_DB="todolist"
+POSTGRES_USER='todolist_user'
+POSTGRES_PASSWORD='159951'
+#DB_HOST='postgres'
+DB_HOST='postgres'
+DB_PORT='5432'
+DJ_SECRET_KEY='django-insecure-!_3=8%7!(m+%kxcyjj7$#f6=+%s(d!*s&35git1x7x&+hy&w+8'
+DJ_DEBUG=True
+DATABASE_URL='postgres://todolist_user:159951@localhost/todolist'
+DJANGO_ALLOWED_HOSTS='localhost 127.0.0.1 [::1] 0.0.0.0'
+SOCIAL_AUTH_VK_OAUTH2_KEY='51565260'
+SOCIAL_AUTH_VK_OAUTH2_SECRET='iDUH1CNPEBU9FgIfu1hd'
+
+
+Добры вечер. Подскажите пожалуйста как подправить копирование проекта. При запуске docker-compose сразу падает API 
+
+docker run -it sky_pro_f_pr-api sh
+ssh nbityutskiy@bityutskiyna-skypro-td.space
+
+4630037031041
+00078
+
+Поддон деревянный плоский (возвратная тара)Ошибка по документу "Заказ клиента №СВER-000687 от 31.03.2023, выполнение к 04.04.2023 20:00:00, направление МК МЯСНОЙ СТАНДАРТ ООО":
+Для склада отгрузки "Склад-холодильник СВК [СВ]" и зоны доставки "Новая Чемровка с" нет установленной стоимости доставки продукции.
